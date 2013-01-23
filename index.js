@@ -16,11 +16,14 @@ var stream = fs.createWriteStream(log, { flags: 'a' });
 var routes = [];
 
 // Basic routing
-function routeMatch(req, url, route) {
-  if (!route || !url) {
+function routeMatch(req, method, route) {
+  if (!route || !req || !req.url) {
     return false;
   }
-  req.params = url.match(route);
+  if (!req.method || (method !== 'all' && req.method.toLowerCase() !== method)) {
+    return false;
+  }
+  req.params = req.url.match(route);
   return !!req.params;
 }
 
@@ -98,8 +101,7 @@ var app = module.exports = http.createServer(function(req, res) {
     for (var index in routes) {
       var route = routes[index];
 
-      // TODO: http method matching
-      if (routeMatch(req, req.url, route.url)) {
+      if (routeMatch(req, route.method, route.url)) {
         async.forEachSeries(route.middleware,
           function(item, callback) {
             item(req, res, callback);
@@ -126,15 +128,34 @@ app.set = function(key, value) {
   return this._settings[key];
 };
 
-// All routes behave the same
-app.get = app.post = app.put = app.all = function addRoute() {
-  routes.push({url: arguments[0], middleware: Array.prototype.slice.call(arguments, 1)});
-};
+
+// Handlers for the various HTTP methods:
+function handleMethod(m) {
+  return function addRoute() {
+    routes.push({url: arguments[0], middleware: Array.prototype.slice.call(arguments, 1), method: m});
+  };
+}
+
+
+// Defined in HTTP/1.0:
+app.get = handleMethod("get");
+app.post = handleMethod("post");
+app.head = handleMethod("head");
+
+// Defined in HTTP/1.1:
+app.put = handleMethod("put");
+app.delete = app.del = handleMethod("delete");
+app.patch = handleMethod("patch")
+
+// Wildcard:
+app.all = handleMethod("all");
+
 
 // Dummy route
-app.get('/', function(req, res) {
+app.get('^/$', function(req, res) {
   res.end('Hello World');
 });
+
 
 if (require.main === module) {
   var port = process.env.NODE_PORT || 3000;
