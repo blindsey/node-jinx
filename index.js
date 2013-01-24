@@ -21,7 +21,8 @@ function routeMatch(req, method, route) {
   if (!route || !req || !req.url) {
     return false;
   }
-  if (!req.method || (method !== 'all' && req.method.toLowerCase() !== method)) {
+  var reqMethod = req.body._method || req.method;
+  if (!reqMethod || (method !== 'all' && reqMethod.toString().toLowerCase() !== method)) {
     return false;
   }
   req.params = req.url.match(route);
