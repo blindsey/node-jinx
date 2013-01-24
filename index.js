@@ -95,7 +95,7 @@ var app = module.exports = http.createServer(function(req, res) {
       try {
         req.body = JSON.parse(body);
       } catch (e) {
-        if (!app._settings || !app._settings.quiet) {
+        if (!app.set("quiet")) {
           console.warn("Invalid JSON: " + e);
         }
       }
@@ -103,7 +103,7 @@ var app = module.exports = http.createServer(function(req, res) {
       try {
         req.body = querystring.parse(body);
       } catch(e) {
-        if (!app._settings || !app._settings.quiet) {
+        if (!app.set("quiet")) {
           console.warn("Invalid form: " + e);
         }
       }
