@@ -150,15 +150,14 @@ app.patch = handleMethod("patch")
 // Wildcard:
 app.all = handleMethod("all");
 
-
-// Dummy route
-app.get('^/$', function(req, res) {
-  res.end('Hello World');
-});
-
-
 if (require.main === module) {
   var port = process.env.NODE_PORT || 3000;
+  
+  // Dummy route
+  app.get('^/$', function(req, res) {
+    res.end('Hello World');
+  });
+  
   console.log("Listening on port " + port);
   app.listen(port);
 }
