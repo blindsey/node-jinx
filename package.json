@@ -4,7 +4,7 @@
   "description": "A stripped down web application framework for node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha --reporter list"
   },
   "repository": {
     "type": "git",
@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "async": "*"
+  },
+  "devDependencies": {
+    "mocha": "*"
   },
   "author": "Ben Lindsey <ben.lindsey@gmail.com",
   "license": "MIT",

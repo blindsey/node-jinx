@@ -96,7 +96,17 @@ var app = module.exports = http.createServer(function(req, res) {
       try {
         req.body = JSON.parse(body);
       } catch (e) {
-        console.warn("Invalid JSON: " + e);
+        if (!app.set("quiet")) {
+          console.warn("Invalid JSON: " + e);
+        }
+      }
+    } else if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
+      try {
+        req.body = querystring.parse(body);
+      } catch(e) {
+        if (!app.set("quiet")) {
+          console.warn("Invalid form: " + e);
+        }
       }
     } else if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
       try {
@@ -158,13 +168,15 @@ app.patch = handleMethod("patch");
 // Wildcard:
 app.all = handleMethod("all");
 
-// Dummy route
-app.get('^/$', function(req, res) {
-  res.end('Hello World');
-});
-
 if (require.main === module) {
   var port = process.env.NODE_PORT || 3000;
+  
+  // Dummy route
+  app.get('^/$', function(req, res) {
+    res.end('Hello World');
+  });
+  
   console.log("Listening on port " + port);
   app.listen(port);
 }
+
