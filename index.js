@@ -1,6 +1,7 @@
 var async = require('async');
 var fs = require('fs');
 var http = require('http');
+var querystring = require('querystring');
 var url = require('url');
 var util = require('util');
 
@@ -96,6 +97,12 @@ var app = module.exports = http.createServer(function(req, res) {
       } catch (e) {
         console.warn("Invalid JSON: " + e);
       }
+    } else if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
+      try {
+        req.body = querystring.parse(body);
+      } catch(e) {
+        console.warn("Invalid form: " + e);
+      }
     }
 
     for (var index in routes) {
@@ -145,17 +152,15 @@ app.head = handleMethod("head");
 // Defined in HTTP/1.1:
 app.put = handleMethod("put");
 app.delete = app.del = handleMethod("delete");
-app.patch = handleMethod("patch")
+app.patch = handleMethod("patch");
 
 // Wildcard:
 app.all = handleMethod("all");
-
 
 // Dummy route
 app.get('^/$', function(req, res) {
   res.end('Hello World');
 });
-
 
 if (require.main === module) {
   var port = process.env.NODE_PORT || 3000;
