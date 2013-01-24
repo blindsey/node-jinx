@@ -7,7 +7,7 @@ var PORT = 5050;
 // Util function to do perform HTTP methods:
 function doRequest(method, url, cb) {
   var req = http.request({
-    hostname: 'localhost', 
+    hostname: '127.0.0.1', 
     port: PORT, 
     path: url,
     method: method
@@ -47,6 +47,11 @@ describe("HTTP method routing", function () {
     
     jinx.listen(PORT);
     return true;
+  });
+  
+  // Shut down this server after this test, to be friendly towards other tests:
+  after(function (done) {
+    jinx.close(done);
   });
   
   // Will test for a correct response:

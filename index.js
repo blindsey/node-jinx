@@ -95,13 +95,17 @@ var app = module.exports = http.createServer(function(req, res) {
       try {
         req.body = JSON.parse(body);
       } catch (e) {
-        console.warn("Invalid JSON: " + e);
+        if (!app._settings || !app._settings.quiet) {
+          console.warn("Invalid JSON: " + e);
+        }
       }
     } else if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
       try {
         req.body = querystring.parse(body);
       } catch(e) {
-        console.warn("Invalid form: " + e);
+        if (!app._settings || !app._settings.quiet) {
+          console.warn("Invalid form: " + e);
+        }
       }
     }
 
@@ -169,3 +173,4 @@ if (require.main === module) {
   console.log("Listening on port " + port);
   app.listen(port);
 }
+
