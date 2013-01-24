@@ -6,15 +6,6 @@ A stripped down web framework for node
 
 Meant as a drop in replacement for express without view rendering, named routing, or error handling.
 
-* Routes are always treated as regular expressions.
-* req.body support for application/json and application/x-www-form-urlencoded POSTs.
-* Method override can be used to send PUT/DELETE.
-* req.header for accessing headers.
-* req.param for accessing parameters.
-* req.send detects payload type and encodes accordingly.
-* Access logs with timing information.
-* app.set(key, value)
-
     var app = require('jinx');
     app.set('message', 'Hello Bro!');
 
@@ -34,3 +25,15 @@ Meant as a drop in replacement for express without view rendering, named routing
     });
 
     app.listen(3000);
+
+TLDR;
+-----
+
+* Routes are always treated as regular expressions.
+* req.body support for application/json and application/x-www-form-urlencoded POSTs.
+* Method override can be used to send PUT/DELETE.
+* req.header for accessing headers.
+* req.param for accessing parameters.
+* req.send detects payload type and encodes accordingly.
+* Access logs with timing information.
+* app.set(key, value)
