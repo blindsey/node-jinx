@@ -1,6 +1,6 @@
 {
   "name": "jinx",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A stripped down web application framework for node",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/blindsey/jinx.git"
+    "url": "git://github.com/blindsey/node-jinx.git"
   },
   "dependencies": {
     "async": "*"
