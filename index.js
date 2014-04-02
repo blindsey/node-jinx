@@ -108,12 +108,6 @@ var app = module.exports = http.createServer(function(req, res) {
           console.warn("Invalid form: " + e);
         }
       }
-    } else if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
-      try {
-        req.body = querystring.parse(body);
-      } catch(e) {
-        console.warn("Invalid form: " + e);
-      }
     }
 
     for (var index in routes) {
