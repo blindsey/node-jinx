@@ -45,6 +45,10 @@ function decorateRequest(req) {
 function decorateResponse(req, res) {
   var start = Date.now();
   var length = 0;
+  
+  if (app.set("showJinxAd")) {
+    res.setHeader("X-Powered-By", "node-jinx");
+  }
 
   var _write = res.write;
   res.write = function(chunk, encoding) {
@@ -133,7 +137,10 @@ var app = module.exports = http.createServer(function(req, res) {
 
 // Settings
 app.set = function(key, value) {
-  this._settings = this._settings || {};
+  this._settings = this._settings || {
+    quiet: false,
+    showJinxAd: true
+  };
   if (typeof value !== 'undefined') {
     this._settings[key] = value;
   }
@@ -164,6 +171,8 @@ app.all = handleMethod("all");
 
 if (require.main === module) {
   var port = process.env.NODE_PORT || 3000;
+
+  app.set("showJinxAd", false);
   
   // Dummy route
   app.get('^/$', function(req, res) {
